@@ -72,24 +72,30 @@ String *concat(String *s1, String *s2)
 unsigned int strSearch(String *s1, String *s2)
 {
   int i;
-  int s2Index, letterCounter=0;
+  int s2Index, spaceIndex =0,wordBoolean=0;
+  int numOfWordLetter=0;
+
 
   for(i=0,s2Index=0; i< s1->length;i++)
   {
+      
       if(s1->ch[i] == s2->ch[s2Index])
       {
+        wordBoolean =1;
         s2Index++;
-        
       }
-      else if((s2Index> 0 && s2Index < s2->length) && s1->ch[i] != s2->ch[s2Index])
+      else if(s2Index != s2->length -1 )
       {
          s2Index=0;
-         letterCounter=0;
+         wordBoolean=0;
       }
-      if(s2Index > 0 && s1->ch[i] != ' ')
-        letterCounter++;    
+      if(wordBoolean && (s1->ch[i] == ' '))
+        numOfWordLetter = i-spaceIndex;    
+      
+      if(s1->ch[i] == ' ')
+        spaceIndex = i;
   }
-  return letterCounter;
+  return numOfWordLetter;
 }
 
 unsigned int findScore(String *s1)
