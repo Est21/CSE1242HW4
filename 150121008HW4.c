@@ -35,23 +35,7 @@ void updatestrlen(String *s)
   s->length = i;
 }
 
-int isEqual(String *str1,const char *ch)
-{
-  int i =0;
 
-  for (;str1->ch[i]!= '\0' && ch[i] != '\0'; i++)
-  {
-    if(str1->ch[i]!=ch[i])
-    {
-      return 0;
-    }
-  }
-
-  if(str1->ch[i] == '0' && ch[i]== '0')
-    return 1;
-
-  return 0;
-}
 int charAt(String *s,int i)
 {
   char ch;
@@ -184,12 +168,11 @@ int initializeValues(char ch[100],String *str1,String *str2,int *selectOption)
             continue;
           }
         }
-
+        
         j++;
       }    
       if(*selectOption == 4)
           return 1;
-        
   }
 
   if (*selectOption == -1 )
@@ -197,7 +180,21 @@ int initializeValues(char ch[100],String *str1,String *str2,int *selectOption)
 
   return 0;
 }
+int isEqual(String *str1,const char *ch)
+{
+  int i =0;
 
+  for (;str1->ch[i]!= '\0' && ch[i] != '\0'; i++)
+  {
+    if(str1->ch[i]!=ch[i])
+      return 0;
+  }
+
+  if(str1->ch[i] == '\0' && ch[i]== '\0')
+    return 1;
+  
+  return 0;
+}
 int main(int argc, char *argv[])
 {
   String str1;
@@ -234,8 +231,7 @@ int main(int argc, char *argv[])
     initializeValues(line,&str1,&str2,&selectOption);
     
     updatestrlen(&str1);
-    updatestrlen(&str2);
-       
+    updatestrlen(&str2);       
 
     if(selectOption == 1)
     {
@@ -249,7 +245,7 @@ int main(int argc, char *argv[])
     {
       updateLetterCount(&str1);
       updateLetterCount(&str2);
-      printf("%s\n",str2.ch);
+      
 
       fprintf(outfilep,"%s\n",concat(&str1,&str2)->ch);
       
@@ -262,7 +258,6 @@ int main(int argc, char *argv[])
     }
     else if(selectOption == 4)
     {
-      printf("%s\n",str1.ch);
       updateLetterCount(&str1);
       fprintf(outfilep,"%u\n",findScore(&str1));
     }
@@ -270,16 +265,14 @@ int main(int argc, char *argv[])
     {
       if(isEqual(&str1,statStr))
       {
-        printf("The number of words: %d\n",wordCounter);
-        printf("The number of alphabetic letters: %d\n",letterCounter);
+        fprintf(outfilep,"The number of words: %d\n",wordCounter);
+        fprintf(outfilep,"The number of alphabetic letters: %d\n",letterCounter);
       }
       if(isEqual(&str1,exitStr))
       {
         fprintf(outfilep,"Program ends. Bye");
         break;
       }
-      
-
     }
     
   }
