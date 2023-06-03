@@ -43,7 +43,6 @@ int isEqual(String *str1,const char *ch)
   {
     if(str1->ch[i]!=ch[i])
     {
-     printf("%d\n",2);
       return 0;
     }
   }
@@ -77,7 +76,8 @@ String *concat(String *s1, String *s2)
     tempStr->ch[i] = s1->ch[i];
 
   tempStr->ch[s1->length] = ' ';
-  for(i = s1->length+1 , j=0;i < s1->length + s2->length;i++,j++)
+
+  for(i = s1->length+1 , j=0;i < s1->length + s2->length+1;i++,j++)
     tempStr->ch[i] = s2->ch[j];
 
   tempStr->ch[s1->length + s2->length+1]= '\0';
@@ -142,8 +142,7 @@ int initializeValues(char ch[100],String *str1,String *str2,int *selectOption)
 {
   // it defines which value assign variable
   int partNumber = 0;
-  int i,j =0,k ;
-  printf("%d\n",6);
+  int i,j =0;
   *selectOption = -1;
 
   for(i=0; ch[i] !='\0';i++)
@@ -158,33 +157,41 @@ int initializeValues(char ch[100],String *str1,String *str2,int *selectOption)
       {
         str1->ch[i] = ch[i];
 
-        if(ch[i+1]=='\0' || ch[i+1]=='\n')
+        if(ch[i+1]==':' || ch[i+1]=='\0' || ch[i+1]=='\n')
        {
           str1->ch[i+1]= '\0';
-          ch[i+1] ='\0';
-          continue;
+          if(ch[i+1]=='\0' || ch[i+1]=='\n')
+          {
+            ch[i+1] ='\0';
+            continue;
+          }
         }
       }
       else if(partNumber ==1)
       {
-        printf("%d\n",5);
-
         *selectOption = (int)ch[i] - '0';
       }
       else if(partNumber == 2)
       {
         str2->ch[j] = ch[i];
-        j++;
-
-        if(ch[i+1]=='\0')
-        {
-          for(k = j+1;k <50;k++)
-            str2->ch[k]= '\0';
+        
+        if(ch[i+1]=='\0' || ch[i+1]=='\n')
+       {
+          str2->ch[j+1]= '\0';
+          if(ch[i+1]=='\0' || ch[i+1]=='\n')
+          {
+            ch[i+1] ='\0';
+            continue;
+          }
         }
-      }
-     
-    
+
+        j++;
+      }    
+      if(*selectOption == 4)
+          return 1;
+        
   }
+
   if (*selectOption == -1 )
      str2->ch[0] = '\0';
 
@@ -228,12 +235,7 @@ int main(int argc, char *argv[])
     
     updatestrlen(&str1);
     updatestrlen(&str2);
-    
-    printf("%s\n",str1.ch);
-    printf("%s\n",statStr);
-    printf("%d\n",7);
-    
-    
+       
 
     if(selectOption == 1)
     {
@@ -247,19 +249,20 @@ int main(int argc, char *argv[])
     {
       updateLetterCount(&str1);
       updateLetterCount(&str2);
+      printf("%s\n",str2.ch);
+
       fprintf(outfilep,"%s\n",concat(&str1,&str2)->ch);
       
     }
     else if(selectOption == 3)
     {
-      
       updateLetterCount(&str1);
       updateLetterCount(&str2);
       fprintf(outfilep,"%u\n",strSearch(&str1,&str2));
-      printf("%d\n",9);
     }
     else if(selectOption == 4)
     {
+      printf("%s\n",str1.ch);
       updateLetterCount(&str1);
       fprintf(outfilep,"%u\n",findScore(&str1));
     }
@@ -272,7 +275,6 @@ int main(int argc, char *argv[])
       }
       if(isEqual(&str1,exitStr))
       {
-        
         fprintf(outfilep,"Program ends. Bye");
         break;
       }
@@ -281,7 +283,7 @@ int main(int argc, char *argv[])
     }
     
   }
-  
+
   fclose(infilep);
   fclose(outfilep);
 
