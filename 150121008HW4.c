@@ -71,29 +71,35 @@ String *concat(String *s1, String *s2)
 
 unsigned int strSearch(String *s1, String *s2)
 {
-  int i;
-  int s2Index, spaceIndex =0,wordBoolean=0;
+  int i,j;
+  int spaceIndex =0,wordBoolean=0;
   int numOfWordLetter=0;
 
 
-  for(i=0,s2Index=0; i< s1->length;i++)
+  for(i=0,j=0; i< s1->length;i++)
   {
-      
-      if(s1->ch[i] == s2->ch[s2Index])
+    
+
+      if(s1->ch[i] == s2->ch[j])
       {
         wordBoolean =1;
-        s2Index++;
+        j++;
       }
-      else if(s2Index != s2->length -1 )
+      else if(j != s2->length)
       {
-         s2Index=0;
+         j=0;
          wordBoolean=0;
       }
-      if(wordBoolean && (s1->ch[i] == ' '))
-        numOfWordLetter = i-spaceIndex;    
-      
+      if(wordBoolean && !((s1->ch[i+1] >= 'a' && s1->ch[i+1] <= 'z' )|| s1->ch[i+1] >= 'A' && s1->ch[i+1] <= 'Z'))
+      {
+        numOfWordLetter = i-spaceIndex;
+        break;
+      }
+
       if(s1->ch[i] == ' ')
+      {
         spaceIndex = i;
+      }
   }
   return numOfWordLetter;
 }
