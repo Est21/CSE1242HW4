@@ -90,7 +90,7 @@ unsigned int strSearch(String *s1, String *s2)
   int i;
   int s2Index, letterCounter=0;
 
-  for(i=0,s2Index=0; i< s1->length;i)
+  for(i=0,s2Index=0; i< s1->length;i++)
   {
       if(s1->ch[i] == s2->ch[s2Index])
       {
@@ -143,7 +143,7 @@ int initializeValues(char ch[100],String *str1,String *str2,int *selectOption)
   // it defines which value assign variable
   int partNumber = 0;
   int i,j =0,k ;
-
+  printf("%d\n",6);
   *selectOption = -1;
 
   for(i=0; ch[i] !='\0';i++)
@@ -157,15 +157,18 @@ int initializeValues(char ch[100],String *str1,String *str2,int *selectOption)
       if(partNumber ==0)
       {
         str1->ch[i] = ch[i];
-        
-      if(ch[i+1]==':' || ch[i+1]=='\0' || ch[i+1]=='\n')
-      {
-        str1->ch[i+1]= '\0';
-        continue;
-      }
+
+        if(ch[i+1]=='\0' || ch[i+1]=='\n')
+       {
+          str1->ch[i+1]= '\0';
+          ch[i+1] ='\0';
+          continue;
+        }
       }
       else if(partNumber ==1)
       {
+        printf("%d\n",5);
+
         *selectOption = (int)ch[i] - '0';
       }
       else if(partNumber == 2)
@@ -180,11 +183,7 @@ int initializeValues(char ch[100],String *str1,String *str2,int *selectOption)
         }
       }
      
-      if(*selectOption == 4)
-      {
-        str2->ch[0] = '\0';
-        return 1;
-      }
+    
   }
   if (*selectOption == -1 )
      str2->ch[0] = '\0';
@@ -224,6 +223,7 @@ int main(int argc, char *argv[])
 
   while(fgets(line, sizeof(line), infilep) != NULL)
   {    
+    
     initializeValues(line,&str1,&str2,&selectOption);
     
     updatestrlen(&str1);
@@ -231,8 +231,8 @@ int main(int argc, char *argv[])
     
     printf("%s\n",str1.ch);
     printf("%s\n",statStr);
-    printf("%d\n",isEqual(&str1,statStr));
-
+    printf("%d\n",7);
+    
     
 
     if(selectOption == 1)
@@ -241,18 +241,22 @@ int main(int argc, char *argv[])
       updateLetterCount(&str1);
       index = str2.ch[0] - '0';
       fprintf(outfilep,"%c\n",((char) charAt(&str1,index)));
+      
     }
     else if(selectOption == 2)
     {
       updateLetterCount(&str1);
       updateLetterCount(&str2);
       fprintf(outfilep,"%s\n",concat(&str1,&str2)->ch);
+      
     }
     else if(selectOption == 3)
     {
+      
       updateLetterCount(&str1);
       updateLetterCount(&str2);
       fprintf(outfilep,"%u\n",strSearch(&str1,&str2));
+      printf("%d\n",9);
     }
     else if(selectOption == 4)
     {
@@ -268,6 +272,7 @@ int main(int argc, char *argv[])
       }
       if(isEqual(&str1,exitStr))
       {
+        
         fprintf(outfilep,"Program ends. Bye");
         break;
       }
@@ -276,6 +281,7 @@ int main(int argc, char *argv[])
     }
     
   }
+  
   fclose(infilep);
   fclose(outfilep);
 
