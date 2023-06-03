@@ -22,10 +22,24 @@ void updateLetterCount(String *str)
   }
 }
 
-//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
 void updateWordCount(String *str)
 {
+  int i;
+  int spaceIndex=-1;
 
+  for(i =0;i<str->length;i++)
+  {
+    if(str->ch[i] == ' ')
+      spaceIndex =i;
+    if( (str->ch[spaceIndex +1] >= 'a' && str->ch[spaceIndex +1] <= 'z' )|| (str->ch[spaceIndex +1] >= 'A' && str->ch[spaceIndex +1] <= 'Z'))
+      {
+        wordCounter++;
+        spaceIndex--;
+      }
+      
+
+  }
 }
 
 void updatestrlen(String *s)
@@ -243,11 +257,12 @@ int main(int argc, char *argv[])
     initializeValues(line,&str1,&str2,&selectOption);
     
     updatestrlen(&str1);
-    updatestrlen(&str2);       
+    updatestrlen(&str2);
+    updateWordCount(&str1);
 
     if(selectOption == 1)
     {
-
+      
       updateLetterCount(&str1);
       index = str2.ch[0] - '0';
       fprintf(outfilep,"%c\n",((char) charAt(&str1,index)));
@@ -257,8 +272,6 @@ int main(int argc, char *argv[])
     {
       updateLetterCount(&str1);
       updateLetterCount(&str2);
-      
-
       fprintf(outfilep,"%s\n",concat(&str1,&str2)->ch);
       
     }
@@ -273,20 +286,16 @@ int main(int argc, char *argv[])
       updateLetterCount(&str1);
       fprintf(outfilep,"%u\n",findScore(&str1));
     }
-    else
-    {
-      if(isEqual(&str1,statStr))
+    else if(isEqual(&str1,statStr))
       {
         fprintf(outfilep,"The number of words: %d\n",wordCounter);
         fprintf(outfilep,"The number of alphabetic letters: %d\n",letterCounter);
       }
-      if(isEqual(&str1,exitStr))
+    else if(isEqual(&str1,exitStr))
       {
         fprintf(outfilep,"Program ends. Bye");
         break;
       }
-    }
-    
   }
 
   fclose(infilep);
