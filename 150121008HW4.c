@@ -116,7 +116,6 @@ int main(int argc, char *argv[])
   }
   fclose(infilep);
   fclose(outfilep);
-
 }
 
 int charAt(String *s,int i)
@@ -169,7 +168,6 @@ unsigned int strSearch(String *s1, String *s2)
 
   for(i=0,j=0; i< s1->length;i++)
   {
-    
       if(s1->ch[i] == s2->ch[j])
       {
         wordBoolean =1;
@@ -183,7 +181,6 @@ unsigned int strSearch(String *s1, String *s2)
       if(wordBoolean && !((s1->ch[i+1] >= 'a' && s1->ch[i+1] <= 'z' )|| s1->ch[i+1] >= 'A' && s1->ch[i+1] <= 'Z'))
       {
         return i-spaceIndex;
-        break;
       }
 
       if(s1->ch[i] == ' ')
@@ -257,8 +254,10 @@ void updateWordCount(String *str)
 // updatestrlen sets the length of the string
 void updatestrlen(String *s)
 {
-  int i;
-  for(i=0; s->ch[i] != '\0';i++);
+  int i =0;
+  while(s->ch[i] != '\0' && s->ch[i] != 13 && s->ch[i] != 10)
+    i++;
+  
   s->length = i;
 }
 // initializeValues takes the line and assigns it to variables according to the desired format
@@ -320,16 +319,14 @@ int initializeValues(char ch[100],String *str1,String *str2,int *selectOption)
 // isEqual checks whether two char pointers have equal values
 int isEqual(String *str1,const char *ch)
 {
-  int i =0;
+  int i;
 
-  for (;str1->ch[i]!= '\0' && ch[i] != '\0'; i++)
-  {
+  for (i =0;str1->ch[i]!= '\0' && ch[i] != '\0'; i++)
     if(str1->ch[i]!=ch[i])
       return 0;
-  }
 
-  if(str1->ch[i] == '\0' && ch[i]== '\0')
+  if((str1->ch[i] == '\0' && ch[i]== '\0') ||(str1->ch[i] == 13 || ch[i]== 10))
     return 1;
-  
+
   return 0;
 }
