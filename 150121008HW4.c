@@ -21,8 +21,6 @@ void updateLetterCount(String *str)
         letterCounter++;
   }
 }
-
-
 void updateWordCount(String *str)
 {
   int i;
@@ -37,19 +35,14 @@ void updateWordCount(String *str)
         wordCounter++;
         spaceIndex--;
       }
-      
-
   }
 }
-
 void updatestrlen(String *s)
 {
   int i;
   for(i=0; s->ch[i] != '\0';i++);
   s->length = i;
 }
-
-
 int charAt(String *s,int i)
 {
   char ch;
@@ -82,18 +75,15 @@ String *concat(String *s1, String *s2)
   
   return tempStr;
 }
-
 unsigned int strSearch(String *s1, String *s2)
 {
   int i,j;
   int spaceIndex =0,wordBoolean=0;
   int numOfWordLetter=0;
 
-
   for(i=0,j=0; i< s1->length;i++)
   {
     
-
       if(s1->ch[i] == s2->ch[j])
       {
         wordBoolean =1;
@@ -117,7 +107,6 @@ unsigned int strSearch(String *s1, String *s2)
   }
   return numOfWordLetter;
 }
-
 unsigned int findScore(String *s1)
 {
   unsigned int score=0;
@@ -162,7 +151,6 @@ int initializeValues(char ch[100],String *str1,String *str2,int *selectOption)
         partNumber++;
         continue;
       }
-
       if(partNumber ==0)
       {
         str1->ch[i] = ch[i];
@@ -228,17 +216,15 @@ int main(int argc, char *argv[])
   String str2;
   str2.ch = (char*) malloc(50*sizeof(char)+sizeof(int));
 
-
   int selectOption;
   int index=0;
   char line[100];
   char *statStr = "stat";
   char *exitStr = "exit";
 
-
   if (3<argc) 
   {
-      printf("insufficient argument!");
+      printf("You should enter 3 argument!");
       return 0;
    }
   FILE *infilep, *outfilep;
@@ -255,7 +241,6 @@ int main(int argc, char *argv[])
   {    
     
     initializeValues(line,&str1,&str2,&selectOption);
-    
     updatestrlen(&str1);
     updatestrlen(&str2);
     updateWordCount(&str1);
@@ -270,29 +255,38 @@ int main(int argc, char *argv[])
     }
     else if(selectOption == 2)
     {
+
       updateLetterCount(&str1);
       updateLetterCount(&str2);
+
       fprintf(outfilep,"%s\n",concat(&str1,&str2)->ch);
       
     }
     else if(selectOption == 3)
     {
+
       updateLetterCount(&str1);
       updateLetterCount(&str2);
+      updateWordCount(&str2);
+
       fprintf(outfilep,"%u\n",strSearch(&str1,&str2));
     }
     else if(selectOption == 4)
     {
+
       updateLetterCount(&str1);
+
       fprintf(outfilep,"%u\n",findScore(&str1));
     }
     else if(isEqual(&str1,statStr))
       {
+
         fprintf(outfilep,"The number of words: %d\n",wordCounter);
         fprintf(outfilep,"The number of alphabetic letters: %d\n",letterCounter);
       }
     else if(isEqual(&str1,exitStr))
       {
+        
         fprintf(outfilep,"Program ends. Bye");
         break;
       }
