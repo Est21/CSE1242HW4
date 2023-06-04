@@ -9,16 +9,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-int charAt(String *s,int i);
-String *concat(String *s1, String *s2);
-unsigned int strSearch(String *s1, String *s2);
-unsigned int findScore(String *s1);
-void updateLetterCount(String *str);
-void updateWordCount(String *str);
-void updatestrlen(String *s);
-int initializeValues(char ch[100],String *str1,String *str2,int *selectOption);
-int isEqual(String *str1,const char *ch);
-
 // I have defined a global variable
 int wordCounter= 0;
 int letterCounter= 0;
@@ -29,6 +19,16 @@ typedef struct string
   char *ch;
   int length;
 }String;
+
+int charAt(String *s,int i);
+String *concat(String *s1, String *s2);
+unsigned int strSearch(String *s1, String *s2);
+unsigned int findScore(String *s1);
+void updateLetterCount(String *str);
+void updateWordCount(String *str);
+void updatestrlen(String *s);
+int initializeValues(char ch[100],String *str1,String *str2,int *selectOption);
+int isEqual(String *str1,const char *ch);
 
 int main(int argc, char *argv[])
 {
@@ -116,6 +116,7 @@ int main(int argc, char *argv[])
   }
   fclose(infilep);
   fclose(outfilep);
+
 }
 
 int charAt(String *s,int i)
@@ -160,6 +161,7 @@ String *concat(String *s1, String *s2)
   
   return tempStr;
 }
+// strSearch compares the data from s2 with s1 and returns the number of letters in the first word that matches with s2
 unsigned int strSearch(String *s1, String *s2)
 {
   int i,j;
@@ -191,11 +193,13 @@ unsigned int strSearch(String *s1, String *s2)
   }
     return 0;
   }
+// findScore returns the score of s1 according to the information provided in the assignment file
 unsigned int findScore(String *s1)
 {
   unsigned int score=0;
   int i;
   char ch;
+
   for(i = 0; i < s1->length;i++)
   {
     ch = s1->ch[i];
@@ -221,6 +225,7 @@ unsigned int findScore(String *s1)
   }
   return score;
 }
+// updateLetterCount counts all the words in the input and updates the count
 void updateLetterCount(String *str)
 {
   int i;
@@ -232,6 +237,7 @@ void updateLetterCount(String *str)
         letterCounter++;
   }
 }
+// updateWordCount counts all the letters in the input and updates the count
 void updateWordCount(String *str)
 {
   int i;
@@ -248,69 +254,70 @@ void updateWordCount(String *str)
       }
   }
 }
+// updatestrlen sets the length of the string
 void updatestrlen(String *s)
 {
   int i;
   for(i=0; s->ch[i] != '\0';i++);
   s->length = i;
 }
+// initializeValues takes the line and assigns it to variables according to the desired format
 int initializeValues(char ch[100],String *str1,String *str2,int *selectOption)
 {
-  // it defines which value assign variable
+  // partNumber defines which value assign variable such as str1,str2 or selectOption
   int partNumber = 0;
   int i,j =0;
+  // -1 assigned to selectOption because some error has occurred when it doesn't
   *selectOption = -1;
 
   for(i=0; ch[i] !='\0';i++)
   {
-      if(ch[i] == ':' || ch[i] == ',')
+    if(ch[i] == ':' || ch[i] == ',')
+    {
+      partNumber++;
+      continue;
+    }
+    if(partNumber ==0)
+    {
+      str1->ch[i] = ch[i];
+      if(ch[i+1]==':' || ch[i+1]=='\0' || ch[i+1]=='\n')
       {
-        partNumber++;
-        continue;
-      }
-      if(partNumber ==0)
-      {
-        str1->ch[i] = ch[i];
-
-        if(ch[i+1]==':' || ch[i+1]=='\0' || ch[i+1]=='\n')
-       {
-          str1->ch[i+1]= '\0';
-          if(ch[i+1]=='\0' || ch[i+1]=='\n')
-          {
-            ch[i+1] ='\0';
-            continue;
-          }
+        str1->ch[i+1]= '\0';
+         if(ch[i+1]=='\0' || ch[i+1]=='\n')
+        {
+          ch[i+1] ='\0';
+          continue;
         }
       }
-      else if(partNumber ==1)
-      {
-        *selectOption = (int)ch[i] - '0';
+    }
+    else if(partNumber ==1)
+    {
+      *selectOption = (int)ch[i] - '0';
       }
-      else if(partNumber == 2)
+    else if(partNumber == 2)
+    {
+      str2->ch[j] = ch[i];  
+      if(ch[i+1]=='\0' || ch[i+1]=='\n')
       {
-        str2->ch[j] = ch[i];
-        
+        str2->ch[j+1]= '\0';
         if(ch[i+1]=='\0' || ch[i+1]=='\n')
-       {
-          str2->ch[j+1]= '\0';
-          if(ch[i+1]=='\0' || ch[i+1]=='\n')
-          {
-            ch[i+1] ='\0';
-            continue;
-          }
+        {
+          ch[i+1] ='\0';
+          continue;
         }
-        
+      }  
         j++;
-      }    
-      if(*selectOption == 4)
-          return 1;
+    }    
+    if(*selectOption == 4)
+      return 1;
   }
-
+  // This if block resets "str2" to zero when it is not needed
   if (*selectOption == -1 )
      str2->ch[0] = '\0';
 
   return 0;
 }
+// isEqual checks whether two char pointers have equal values
 int isEqual(String *str1,const char *ch)
 {
   int i =0;
